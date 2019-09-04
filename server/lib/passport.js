@@ -10,11 +10,7 @@ var JWT_STRATEGY_OPTS = {
 
 passport.use(
   new JwtStrategy(JWT_STRATEGY_OPTS, function (jwtPayload, done) {
-<<<<<<< HEAD
-    db.Users.findOne({ where: { id: jwtPayload.sub } })
-=======
     db.Users.findOne({ _id: jwtPayload.sub })
->>>>>>> mongoose
       .then(user => done(null, user || false))
       .catch(err => done(err, false));
   })

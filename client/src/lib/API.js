@@ -6,9 +6,9 @@ export default {
       return axios.post('/api/users/login', { email, password });
     },
 
-    create: function (email, password) {
-      return axios.post('/api/users', { email, password });
-    },
+    // create: function (email, password) {
+    //   return axios.post('/api/users', { email, password });
+    // },
 
     getMe: function (authToken) {
       return axios.get('/api/users/me', {
@@ -18,7 +18,7 @@ export default {
       });
     },
     register: function (email, password) {
-      return axios.post('/api/users/register', { email, password });
+      return axios.post('/api/users', { email, password });
     }
   },
 
