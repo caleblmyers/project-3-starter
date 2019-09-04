@@ -14,8 +14,11 @@ if (process.env.NODE_ENV !== 'production') {
 //-- Dependencies ------------------------------------------------------------
 const express = require('express');
 const logger = require('morgan');
+const bodyParser = require('body-parser')
 
-const { passport } = require('./lib/passport');
+const db = require('./models')
+
+const passport = require('./utils/passport');
 
 //-- Constants ---------------------------------------------------------------
 const PORT = process.env.PORT || 3001;
@@ -26,8 +29,8 @@ const app = express();
 
 //-- Middleware --------------------------------------------------------------
 app.use(logger(LOG_MODE));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(passport.initialize());
 
 //-- Static Server (Production) ----------------------------------------------
@@ -38,7 +41,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //-- Controller Routes -------------------------------------------------------
-app.use(require('./controllers'));
+// app.use(require('./controllers'));
 
 //-- React catch-all ---------------------------------------------------------
 app.get('*', (req, res) => {
@@ -46,9 +49,13 @@ app.get('*', (req, res) => {
 });
 
 //-- Main --------------------------------------------------------------------
-app.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}...`);
-});
+db.sequelize.sync({ force: true })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server listening on port ${PORT}...`);
+    });
+  })
+  .catch(err => console.log(err))
 
 //-- Export to Tests ---------------------------------------------------------
 module.exports = app;

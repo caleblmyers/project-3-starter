@@ -1,13 +1,8 @@
-class User {
-  constructor({ id, email, password }) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-  }
+module.exports = function(sequelize, DataTypes) {
+  const User = sequelize.define("User", {
+    email: DataTypes.STRING,
+    password: DataTypes.STRING
+  })
 
-  comparePassword(challenge) {
-    return this.password === challenge;
-  }
+  return User
 }
-
-module.exports = User;
